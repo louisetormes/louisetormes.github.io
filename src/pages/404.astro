@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Página não encontrada" description="Esta página não existe.">
+	<section class="narrow wrap">
+		<p class="eyebrow mono">404</p>
+		<h1>Esta página não existe — ou ainda não foi escrita.</h1>
+		<p><a href="/">← Voltar ao início</a> · <a href="/blog/">Ver os escritos</a></p>
+	</section>
+</BaseLayout>
+
+<style>
+	.wrap {
+		padding-top: clamp(4rem, 12vw, 9rem);
+	}
+	.eyebrow {
+		margin: 0 0 1rem;
+		color: var(--accent);
+	}
+	h1 {
+		font-size: clamp(2rem, 5vw, 2.8rem);
+		font-weight: 400;
+		letter-spacing: -0.02em;
+	}
+	p:last-child {
+		margin-top: 2rem;
+		color: var(--muted);
+	}
+</style>

@@ -1,0 +1,50 @@
+---
+import PostList from '../../components/PostList.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { collectTags, getPosts, type Post } from '../../utils/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return collectTags(posts).map(({ tag }) => ({
+		params: { tag },
+		props: { posts: posts.filter((p) => p.data.tags.includes(tag)) },
+	}));
+}
+
+interface Props {
+	posts: Post[];
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout title={`Tema: ${tag}`} description={`Textos sobre ${tag}.`}>
+	<header class="narrow page-head">
+		<p class="eyebrow"><a href="/tags/">Temas</a> / {posts.length} {posts.length === 1 ? 'texto' : 'textos'}</p>
+		<h1>{tag}</h1>
+	</header>
+	<div class="narrow">
+		<PostList posts={posts} />
+	</div>
+</BaseLayout>
+
+<style>
+	.page-head {
+		padding-top: clamp(3rem, 8vw, 5.5rem);
+		padding-bottom: 2rem;
+	}
+	.page-head .eyebrow {
+		margin: 0 0 1rem;
+	}
+	.page-head .eyebrow a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+	h1 {
+		font-size: clamp(2.4rem, 6vw, 3.5rem);
+		font-weight: 400;
+		font-style: italic;
+		letter-spacing: -0.03em;
+	}
+</style>
