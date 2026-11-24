@@ -1,0 +1,246 @@
+---
+import { AUTHOR, SOCIAL_LINKS } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const facts = [
+	{ value: '6+ anos', label: 'em tecnologia' },
+	{ value: 'Java · PL/SQL', label: 'base em backend e sistemas legados' },
+	{ value: 'Sprint completa', label: 'do PRD ao QA, com agentes de IA' },
+];
+
+const stages = [
+	{ name: 'PRD', desc: 'Entender o problema e definir com clareza o que será entregue — e o que não será.' },
+	{ name: 'Arquitetura de solução', desc: 'Decidir como construir e registrar por que essa foi a escolha.' },
+	{ name: 'Histórias e estimativas', desc: 'Quebrar o trabalho em partes entregáveis e dimensionar cada uma.' },
+	{ name: 'Especificação', desc: 'Detalhar cada história até que ela possa ser executada sem ambiguidade.' },
+	{ name: 'Desenvolvimento', desc: 'Implementar, com agentes de IA como parceiros de código.' },
+	{ name: 'Coleta de evidências', desc: 'Comprovar, com dados e testes, que o que foi feito funciona.' },
+	{ name: 'Auditoria de PR', desc: 'Revisar com rigor — inclusive, e principalmente, o código gerado por IA.' },
+	{ name: 'QA e conclusão', desc: 'Validar com o olhar de quem usa e fechar o ciclo da entrega.' },
+];
+---
+
+<BaseLayout
+	title="Sobre"
+	description="Desenvolvedora backend com mais de seis anos de experiência que passou a conduzir a sprint de ponta a ponta, com agentes de IA como parte do time."
+>
+	<header class="narrow page-head">
+		<p class="eyebrow">Sobre</p>
+		<h1>{AUTHOR}</h1>
+		<p class="lede">
+			Desenvolvedora backend que passou a conduzir a sprint de ponta a ponta — com agentes de IA como
+			parte do time.
+		</p>
+	</header>
+
+	<div class="narrow">
+		<dl class="facts">
+			{
+				facts.map((f) => (
+					<div>
+						<dt>{f.value}</dt>
+						<dd>{f.label}</dd>
+					</div>
+				))
+			}
+		</dl>
+
+		<div class="prose">
+			<p>
+				Atuo na área de tecnologia há pouco mais de seis anos. Construí minha base no backend,
+				majoritariamente com <strong>Java</strong> e <strong>PL/SQL</strong> — boa parte dela em
+				sistemas legados, onde se aprende cedo que entender o que já existe é tão importante quanto
+				escrever código novo.
+			</p>
+			<p>
+				Minha formação veio de várias frentes: faculdade, cursos e muita leitura. Mas foi no dia a dia,
+				resolvendo problemas reais, que mais evoluí. A prática sempre foi minha principal escola.
+			</p>
+
+			<h2>De uma etapa para a sprint inteira</h2>
+			<p>
+				Há um ano, meu papel na sprint era bem delimitado: eu era dona da etapa de desenvolvimento e,
+				quando o time precisava, me arriscava também nos cenários de QA.
+			</p>
+			<p>
+				A chegada dos agentes de IA mudou essa fronteira. Tive que me reinventar e aprender novos
+				processos — e, com eles, um novo papel. Etapas que antes passavam por pessoas diferentes
+				passaram a caber em um único fluxo, desde que alguém o conduza com critério. Hoje sou dona da
+				sprint por completo:
+			</p>
+		</div>
+
+		<ol class="stages" aria-label="Etapas da sprint">
+			{
+				stages.map((s, i) => (
+					<li>
+						<span class="num mono">{String(i + 1).padStart(2, '0')}</span>
+						<div>
+							<h3>{s.name}</h3>
+							<p>{s.desc}</p>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+
+		<div class="prose">
+			<h2>O que essa mudança me ensinou</h2>
+			<p>
+				Reinventar-me não foi trocar de ferramenta; foi assumir mais responsabilidade. Os agentes
+				aceleram cada etapa, mas não decidem o que importa. Definir bem o problema, escolher a
+				arquitetura, desconfiar do que parece certo demais e responder pela qualidade da entrega
+				continuam sendo trabalho humano — e, quando uma só pessoa conduz o ciclo inteiro, esse
+				julgamento pesa ainda mais.
+			</p>
+			<blockquote>
+				<p>A IA acelera a execução. A responsabilidade pela entrega continua sendo de quem conduz.</p>
+			</blockquote>
+			<p>
+				É sobre esse território — onde a experiência de backend encontra a orquestração de agentes — que
+				escrevo aqui: o que funciona, o que não funciona e o que ainda estou aprendendo.
+			</p>
+
+			<h2>Contato</h2>
+			<p>
+				As opiniões aqui são pessoais e não representam empregadores atuais ou anteriores. Para
+				conversar:{' '}
+				{
+					SOCIAL_LINKS.map((l, i) => (
+						<>
+							{i > 0 && ', '}
+							<a href={l.href} target="_blank" rel="noopener noreferrer me">
+								{l.label}
+							</a>
+						</>
+					))
+				}.
+			</p>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.page-head {
+		padding-top: clamp(3rem, 8vw, 5.5rem);
+		padding-bottom: 2.5rem;
+	}
+	.page-head .eyebrow {
+		margin: 0 0 1rem;
+		color: var(--accent);
+	}
+	h1 {
+		font-size: clamp(2.4rem, 6vw, 3.5rem);
+		font-weight: 400;
+		letter-spacing: -0.03em;
+	}
+	.lede {
+		margin: 1.1rem 0 0;
+		font-family: var(--font-serif);
+		font-size: 1.3rem;
+		line-height: 1.5;
+		font-style: italic;
+		color: var(--muted);
+		text-wrap: pretty;
+	}
+
+	/* Faixa de destaques */
+	.facts {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		margin: 0 0 3rem;
+		border-block: 1px solid var(--border);
+	}
+	.facts div {
+		padding: 1.25rem 1rem 1.25rem 0;
+	}
+	.facts div + div {
+		padding-left: 1.25rem;
+		border-left: 1px solid var(--border);
+	}
+	.facts dt {
+		font-family: var(--font-serif);
+		font-size: 1.25rem;
+		color: var(--text);
+		line-height: 1.2;
+	}
+	.facts dd {
+		margin: 0.35rem 0 0;
+		font-size: 0.8125rem;
+		line-height: 1.45;
+		color: var(--muted);
+	}
+
+	/* Linha do tempo da sprint */
+	.stages {
+		list-style: none;
+		margin: 2.5rem 0 1rem;
+		padding: 0;
+		position: relative;
+	}
+	.stages::before {
+		content: '';
+		position: absolute;
+		left: 1.05rem;
+		top: 1rem;
+		bottom: 1rem;
+		width: 1px;
+		background: var(--border);
+	}
+	.stages li {
+		position: relative;
+		display: grid;
+		grid-template-columns: 2.1rem 1fr;
+		gap: 1.1rem;
+		padding-block: 0.85rem;
+	}
+	.num {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 2.1rem;
+		height: 2.1rem;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		background: var(--bg);
+		color: var(--accent);
+		font-size: 0.75rem;
+	}
+	.stages li:last-child .num {
+		background: var(--text);
+		border-color: var(--text);
+		color: var(--bg);
+	}
+	.stages h3 {
+		font-family: var(--font-sans);
+		font-size: 0.975rem;
+		font-weight: 600;
+		letter-spacing: 0;
+		padding-top: 0.3rem;
+	}
+	.stages p {
+		margin: 0.2rem 0 0;
+		font-size: 0.925rem;
+		line-height: 1.55;
+		color: var(--muted);
+	}
+
+	.prose + .stages,
+	.stages + .prose {
+		margin-top: 2.5rem;
+	}
+
+	@media (max-width: 560px) {
+		.facts {
+			grid-template-columns: 1fr;
+		}
+		.facts div,
+		.facts div + div {
+			padding: 1rem 0;
+			border-left: 0;
+		}
+		.facts div + div {
+			border-top: 1px solid var(--border);
+		}
+	}
+</style>

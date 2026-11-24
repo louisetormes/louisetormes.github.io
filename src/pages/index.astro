@@ -1,0 +1,181 @@
+---
+import PostList from '../components/PostList.astro';
+import { SITE_TAGLINE } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { collectTags, getPosts } from '../utils/posts';
+
+const posts = await getPosts();
+const recent = posts.slice(0, 6);
+const tags = collectTags(posts).slice(0, 10);
+---
+
+<BaseLayout>
+	<section class="container intro">
+		<p class="eyebrow">{SITE_TAGLINE}</p>
+		<h1>
+			Notas sobre construir software <em>com</em> e <em>apesar</em> da inteligência artificial.
+		</h1>
+		<p class="lede">
+			Um caderno público de quem escreve código todos os dias e tenta entender, com calma e algum
+			ceticismo, o que muda quando a máquina começa a escrever junto: arquitetura, qualidade,
+			segurança, processo e o ofício de desenvolver.
+		</p>
+		<div class="cta">
+			<a class="button" href="/blog/">Ler os escritos</a>
+			<a class="link" href="/sobre/">Sobre a autoria →</a>
+		</div>
+	</section>
+
+	<section class="container grid" aria-labelledby="recentes">
+		<div class="col-head">
+			<h2 id="recentes" class="eyebrow">Escritos recentes</h2>
+			{posts.length > recent.length && <a class="all" href="/blog/">Ver todos ({posts.length})</a>}
+		</div>
+		<div class="col-body">
+			{
+				recent.length > 0 ? (
+					<PostList posts={recent} />
+				) : (
+					<p class="empty">O primeiro texto está a caminho.</p>
+				)
+			}
+		</div>
+	</section>
+
+	{
+		tags.length > 0 && (
+			<section class="container grid" aria-labelledby="temas">
+				<div class="col-head">
+					<h2 id="temas" class="eyebrow">
+						Temas
+					</h2>
+				</div>
+				<ul class="col-body tags">
+					{tags.map(({ tag, count }) => (
+						<li>
+							<a class="tag" href={`/tags/${tag}/`}>
+								{tag} <span class="count">{count}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.intro {
+		padding-top: clamp(4rem, 11vw, 8rem);
+		padding-bottom: clamp(3.5rem, 8vw, 6rem);
+	}
+	.intro .eyebrow {
+		margin: 0 0 1.5rem;
+		color: var(--accent);
+	}
+	h1 {
+		max-width: 18ch;
+		font-size: clamp(2.5rem, 6.5vw, 4.4rem);
+		font-weight: 400;
+		line-height: 1.04;
+		letter-spacing: -0.03em;
+	}
+	h1 em {
+		font-style: italic;
+		color: var(--accent);
+	}
+	.lede {
+		max-width: 56ch;
+		margin: 2rem 0 0;
+		font-size: 1.125rem;
+		line-height: 1.65;
+		color: var(--muted);
+	}
+	.cta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1.5rem;
+		margin-top: 2.5rem;
+	}
+	.button {
+		display: inline-block;
+		padding: 0.7rem 1.3rem;
+		border-radius: 999px;
+		background: var(--text);
+		color: var(--bg);
+		font-size: 0.9rem;
+		font-weight: 500;
+		text-decoration: none;
+		transition: opacity 0.15s ease;
+	}
+	.button:hover {
+		color: var(--bg);
+		opacity: 0.85;
+	}
+	.link {
+		font-size: 0.9rem;
+		font-weight: 500;
+		text-decoration: none;
+		color: var(--text);
+	}
+
+	/* Grade editorial: rótulo à esquerda, conteúdo à direita */
+	.grid {
+		display: grid;
+		grid-template-columns: 220px 1fr;
+		gap: 2rem 3rem;
+		padding-block: 3rem;
+		border-top: 1px solid var(--border);
+	}
+	.col-head {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.col-head h2 {
+		margin: 0;
+		padding-top: 1.75rem;
+	}
+	.all {
+		font-size: 0.875rem;
+		color: var(--muted);
+		text-decoration: none;
+	}
+	.col-body {
+		min-width: 0;
+		max-width: var(--measure);
+	}
+	.empty {
+		margin: 1.75rem 0 0;
+		font-family: var(--font-serif);
+		font-style: italic;
+		color: var(--muted);
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		list-style: none;
+		margin: 0;
+		padding: 1.6rem 0 0;
+	}
+	.count {
+		margin-left: 0.2rem;
+		opacity: 0.6;
+	}
+	@media (max-width: 760px) {
+		.grid {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+		.col-head {
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: baseline;
+		}
+		.col-head h2 {
+			padding-top: 0;
+		}
+	}
+</style>

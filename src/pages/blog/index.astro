@@ -1,0 +1,85 @@
+---
+import PostList from '../../components/PostList.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, type Post } from '../../utils/posts';
+
+const posts = await getPosts();
+
+// Agrupa por ano (UTC, coerente com as datas do frontmatter)
+const byYear = new Map<number, Post[]>();
+for (const p of posts) {
+	const y = p.data.pubDate.getUTCFullYear();
+	byYear.set(y, [...(byYear.get(y) ?? []), p]);
+}
+---
+
+<BaseLayout title="Escritos" description="Todos os textos publicados, do mais recente ao mais antigo.">
+	<header class="container page-head">
+		<p class="eyebrow">Arquivo</p>
+		<h1>Escritos</h1>
+		<p class="sub">
+			{`${posts.length} ${posts.length === 1 ? 'texto' : 'textos'}`} sobre engenharia de software, IA e o ofício
+			de desenvolver.
+		</p>
+	</header>
+
+	{
+		[...byYear.entries()].map(([year, list]) => (
+			<section class="container year" aria-labelledby={`ano-${year}`}>
+				<h2 id={`ano-${year}`} class="year-label mono">
+					{year}
+				</h2>
+				<div class="year-body">
+					<PostList posts={list} />
+				</div>
+			</section>
+		))
+	}
+</BaseLayout>
+
+<style>
+	.page-head {
+		padding-top: clamp(3rem, 8vw, 5.5rem);
+		padding-bottom: 3rem;
+	}
+	.page-head .eyebrow {
+		margin: 0 0 1rem;
+		color: var(--accent);
+	}
+	h1 {
+		font-size: clamp(2.4rem, 6vw, 3.5rem);
+		font-weight: 400;
+		letter-spacing: -0.03em;
+	}
+	.sub {
+		margin: 1rem 0 0;
+		color: var(--muted);
+		max-width: 52ch;
+	}
+	.year {
+		display: grid;
+		grid-template-columns: 220px 1fr;
+		gap: 0 3rem;
+		padding-bottom: 2.5rem;
+	}
+	.year-label {
+		margin: 0;
+		padding-top: 1.75rem;
+		font-size: 0.875rem;
+		color: var(--muted);
+		font-weight: 400;
+	}
+	.year-body {
+		min-width: 0;
+		max-width: var(--measure);
+	}
+	@media (max-width: 760px) {
+		.year {
+			grid-template-columns: 1fr;
+		}
+		.year-label {
+			padding-top: 0;
+			margin-bottom: 0.75rem;
+		}
+	}
+</style>

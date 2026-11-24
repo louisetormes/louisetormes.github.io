@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { collectTags, getPosts } from '../../utils/posts';
+
+const tags = collectTags(await getPosts());
+---
+
+<BaseLayout title="Temas" description="Os assuntos que atravessam os textos deste blog.">
+	<header class="narrow page-head">
+		<p class="eyebrow">Índice</p>
+		<h1>Temas</h1>
+	</header>
+	<div class="narrow">
+		{
+			tags.length === 0 ? (
+				<p class="empty">Nenhum tema por aqui ainda.</p>
+			) : (
+				<ul class="tag-index">
+					{tags.map(({ tag, count }) => (
+						<li>
+							<a href={`/tags/${tag}/`}>
+								<span class="name">{tag}</span>
+								<span class="mono count">
+									{count} {count === 1 ? 'texto' : 'textos'}
+								</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	.page-head {
+		padding-top: clamp(3rem, 8vw, 5.5rem);
+		padding-bottom: 2.5rem;
+	}
+	.page-head .eyebrow {
+		margin: 0 0 1rem;
+		color: var(--accent);
+	}
+	h1 {
+		font-size: clamp(2.4rem, 6vw, 3.5rem);
+		font-weight: 400;
+		letter-spacing: -0.03em;
+	}
+	.tag-index {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.tag-index li {
+		border-top: 1px solid var(--border);
+	}
+	.tag-index li:last-child {
+		border-bottom: 1px solid var(--border);
+	}
+	.tag-index a {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		padding: 1rem 0;
+		text-decoration: none;
+	}
+	.name {
+		font-family: var(--font-serif);
+		font-size: 1.3rem;
+	}
+	.count {
+		color: var(--muted);
+	}
+	.empty {
+		font-family: var(--font-serif);
+		font-style: italic;
+		color: var(--muted);
+	}
+</style>

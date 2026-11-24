@@ -1,0 +1,16 @@
+---
+interface Props {
+	date: Date;
+	format?: 'long' | 'short';
+}
+
+const { date, format = 'long' } = Astro.props;
+
+// timeZone UTC: datas do frontmatter ("2026-11-24") são meia-noite UTC; sem isso, no Brasil viram o dia anterior.
+const text =
+	format === 'short'
+		? date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', timeZone: 'UTC' }).replace('.', '')
+		: date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+
+<time datetime={date.toISOString()}>{text}</time>
